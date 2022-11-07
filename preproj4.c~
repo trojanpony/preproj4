@@ -1,0 +1,56 @@
+/*
+* Auth: Micah Crenwelge
+* Date: 11/5/2022
+* Desc: A program that takes file name/s from the command line and copies the contents of the file exactly as they are to a new file using system calls
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+// function that takes a file name as a parameter and reads the contents of the file
+
+int read_file(char *file_name)
+{
+  // Declare variables
+  int fd;
+  char buf[1024];
+  int n;
+  int i;
+
+  fd = open(file_name, O_RDONLY); // open file for reading
+
+  if (fd == -1)
+  {
+    perror("open");
+    exit(1);
+  }
+
+  while ((n = read(fd, buf, 1024)) > 0)
+  {
+      printf("%s", buf);
+  }
+
+  close(fd);
+
+  return 0;
+}
+
+
+int main(int argc, char *argv[])
+{
+  // runs the read_file function for each file name passed in as a parameter
+
+  for (int i = 1; i < argc; i++)
+  {
+    read_file(argv[i]);
+  }
+
+return 0;
+}
+
+
+
