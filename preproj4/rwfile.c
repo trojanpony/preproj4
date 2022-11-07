@@ -44,35 +44,35 @@ void SIGINT_handler( int sig ) {
 int main(int argc, char *argv[])
 {
 
-  // allocate buffer
+  /* allocate buffer */
   buf = (char *)malloc(BUFFSIZE);
 
-  // Make sure buffer was allocated
+  /* Make sure buffer was allocated */
   if (buf == NULL) {
     fprintf(stderr, "Error: could not allocate memory\n");
     exit(1);
   }
 
-  // Set up signal handler
+  /* Set up signal handler */
   signal( SIGINT, SIGINT_handler );
 
-  // set file counter to 1
+  /* set file counter to 1 */
   file_cntr = 1;
 
-  // loop through all files
+  /* loop through all files */
   while (file_cntr < argc) {
 
-  // Open file for in read only mode
+  /* Open file for in read only mode */
   fd = open(argv[file_cntr], O_RDONLY);
 
-  // Make sure file was opened
+  /* Make sure file was opened */
   if (fd < 0) {
     fprintf(stderr, "Error: could not open file %s\n", argv[1]);
     cleanup();
     exit(1);
   }
 
-  // Read file into buffer
+  /* Read file into buffer */
   n = read(fd, buf, BUFFSIZE);
   if (n < 0) {
     fprintf(stderr, "Error: could not read file %s\n", argv[1]);
@@ -81,38 +81,37 @@ int main(int argc, char *argv[])
   }
 
 
-  // Close file
+  /* Close file */
   close(fd);
 
-  // Create new file
+  /* Create new file */
   sprintf(fname, "file-%02d.dat", file_cntr);
   new_fd = open(fname, O_CREAT | O_WRONLY | O_TRUNC,  S_IRUSR | S_IWUSR);
   
-  // Make sure file was created
+  /* Make sure file was created */
   if (new_fd < 0) {
     fprintf(stderr, "Error: could not create file %s\n", fname);
     cleanup();
     exit(1);
   }
 
-  // Write buffer to new file
-  printf("%d", n);
+  /* Write buffer to new file */
   m = write(new_fd, buf, (size_t) n);
   if (m != n) {
     fprintf(stderr, "Error: could not write to file %s\n", fname);
     cleanup();
     exit(1);
  
-  // Close new file
+  /* Close new file */
   close(new_fd);
   }
   file_cntr++;
   }
 
-// Cleanup
+/* Cleanup */
 cleanup();
 
-// Exit
+/* Exit */
 return EXIT_SUCCESS;
 }
   
